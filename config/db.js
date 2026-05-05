@@ -1,0 +1,12 @@
+const { Pool } = require("pg");
+require("dotenv").config();
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  // ADD THIS PART:
+  ssl: process.env.DATABASE_URL.includes('localhost') || process.env.DATABASE_URL.includes('127.0.0.1') 
+    ? false 
+    : { rejectUnauthorized: false }
+});
+
+
+module.exports = pool;
