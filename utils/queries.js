@@ -142,3 +142,21 @@ SELECT username, initials
 FROM profiles
 WHERE id = $1
 `;
+
+//Room-related SQL queries
+
+exports.CREATE_ROOM = `
+    INSERT INTO rooms ("created_by", "lid") 
+    VALUES ($1, $2) 
+    RETURNING "rid";
+`;
+
+exports.CLOSE_ROOM = `
+    UPDATE rooms 
+    SET "is_active" = false 
+    WHERE "rid" = $1 AND "created_by" = $2;
+`;
+
+exports.GET_ROOM_STATUS = `
+    SELECT "is_active", "lid" FROM rooms WHERE "rid" = $1;
+`;
