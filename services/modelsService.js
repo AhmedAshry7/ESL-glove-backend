@@ -13,11 +13,15 @@ exports.getModelBrief = async (modelId) => {
   return result.rows;
 };
 
-exports.getModels = async () => {
+exports.getModels = async (lid) => {
 
-  const result = await pool.query(GET_MODELs);
+    if (!lid) {
+        const result = await pool.query(GET_MODELs);
+        return result.rows;
+    }
+    const result = await pool.query(GET_MODELs, [lid]);
 
-  return result.rows;
+    return result.rows;
 };
 
 

@@ -185,7 +185,12 @@ exports.deleteModel = async (req, res) => {
 exports.getModels = async (req, res) => {
 
   try {
-    const models = await modelsService.getModels();
+        if (!req.params.lid) {
+        const models = await modelsService.getModels();
+        res.json(models);
+    }
+    const { lid } = req.params;
+    const models = await modelsService.getModels(lid);
     res.json(models);
   } catch (error) {
     console.error(error);
