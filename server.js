@@ -1,6 +1,49 @@
 const express = require("express");
 const cors = require("cors");
+const http = require('http');
+const { Server } = require('socket.io');
 require("dotenv").config();
+
+const app = express();
+
+// 1. Make sure CORS allows your frontend (e.g., localhost:3000)
+app.use(cors({
+    origin: "http://localhost:3000", // Update this to match your Next.js port if different
+    methods: ["GET", "POST", "DELETE"]
+}));
+
+app.use(express.json());
+
+// 2. Create HTTP Server wrapping Express
+const server = http.createServer(app);
+
+// 3. Initialize Socket.io with CORS rules matching your frontend
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000", 
+        methods: ["GET", "POST"]
+    }
+});
+
+// 4. Share the io instance with your Express routes/controllers
+app.set('socketio', io);
+// Or attach to global if you prefer: global.io = io;
+
+// 5. Setup the Socket connection & room joining logic
+io.on('connection', (socket) => {
+    console.log(`🔌 Client connected to socket: ${socket.id}`);
+
+    // Listen for the frontend joining its specific training room
+    socket.on('join_session', (sessionId) => {
+        socket.join(sessionId);
+        console.log(`🏠 Client joined training room: ${sessionId}`);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`❌ Client disconnected: ${socket.id}`);
+    });
+});
+
 
 const submissionsRoutes = require("./routes/submissionsRoutes");
 const modelsRoutes = require("./routes/modelsRoutes");
@@ -8,10 +51,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const languageRoutes = require("./routes/languageRoutes");
 const roomRoutes = require("./routes/roomsRoutes");
 
-const app = express();
 
-app.use(cors());
-app.use(express.json());
 
 app.use("/api/submissions", submissionsRoutes);
 app.use("/api/models", modelsRoutes);
@@ -20,6 +60,6 @@ app.use("/api/languages", languageRoutes);
 app.use("/api/rooms", roomRoutes);
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
