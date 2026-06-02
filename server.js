@@ -2,17 +2,32 @@ const express = require("express");
 const cors = require("cors");
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require("path");
+const YAML = require("yamljs");
+const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
 
 const app = express();
 
-app.use(cors({origin: "http://localhost:3000", methods: ["GET", "POST", "DELETE"]}));
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+
+// 1. Make sure CORS allows your frontend
+app.use(cors({
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "DELETE"]
+}));
 
 app.use(express.json());
 
 const server = http.createServer(app);
 
-const io = new Server(server, {cors: {origin: "http://localhost:3000", methods: ["GET", "POST"]}});
+// 3. Initialize Socket.io with CORS rules matching your frontend
+const io = new Server(server, {
+    cors: {
+        origin: FRONTEND_URL, 
+        methods: ["GET", "POST"]
+    }
+});
 
 app.set('socketio', io);
 
@@ -32,6 +47,10 @@ const modelsRoutes = require("./routes/modelsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const languageRoutes = require("./routes/languageRoutes");
 const roomRoutes = require("./routes/roomsRoutes");
+
+const openapiPath = path.join(__dirname, "openapi.yaml");
+const openapiDoc = YAML.load(openapiPath);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
 app.use("/api/submissions", submissionsRoutes);
 app.use("/api/models", modelsRoutes);

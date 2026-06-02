@@ -1,7 +1,7 @@
 const pool = require("../config/db");
 const supabase = require('../config/supabase');
 const axios = require('axios');
-const { GET_MODEL_BRIEF, GET_MODELs, ADD_MODEL, DELETE_MODEL, ADD_MODELs } = require("../utils/queries");
+const { GET_MODEL_BRIEF, GET_MODELs, ADD_MODEL, DELETE_MODEL, ADD_MODELs, GET_MODEL_FILE_BY_ID } = require("../utils/queries");
 
 exports.getModelBrief = async (modelId) => {
   const result = await pool.query(GET_MODEL_BRIEF, [modelId]);
@@ -35,4 +35,9 @@ exports.addModel = async ({userId, lid, base_mid, modelName, fileContent}) => {
     } catch (error) {
         throw error;
     }
+};
+
+exports.getModelFileById = async (mid) => {
+  const result = await pool.query(GET_MODEL_FILE_BY_ID, [mid]);
+  return result.rows[0] || null;
 };
