@@ -2,16 +2,12 @@ const pool = require("../config/db");
 const { GET_LANGUAGE_INFO, GET_LANGUAGES, ADD_LANGUAGE , DELETE_LANGUAGE } = require("../utils/queries");
 
 exports.getLanguageInfo = async (languageId) => {
-
   const result = await pool.query(GET_LANGUAGE_INFO,[languageId]);
-
   return result.rows;
 };
 
 exports.getLanguages = async () => {
-
   const result = await pool.query(GET_LANGUAGES);
-
   return result.rows;
 };
 

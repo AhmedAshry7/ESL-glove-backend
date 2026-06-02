@@ -10,7 +10,6 @@ global.activeTrainings = global.activeTrainings || {};
 
 exports.initializeTrainingSession = async (req, res) => {
     const { modelName, userId } = req.body;
-
     if (!modelName) {
         return res.status(400).json({ error: "Missing model name" });
     }

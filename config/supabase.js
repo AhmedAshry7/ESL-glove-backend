@@ -1,10 +1,10 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-// This client is strictly for Storage and Auth
+// Creating a supabase client
 const supabase = createClient(
   process.env.SUPABASE_URL, 
-  process.env.SERVICE_ROLE_KEY // Needed to bypass security for merging/deleting
+  process.env.SERVICE_ROLE_KEY
 );
 
 module.exports = supabase;

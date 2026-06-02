@@ -1,4 +1,4 @@
-// Language-related SQL queries
+// Language-related queries
 
 exports.GET_LANGUAGE_INFO = `
 SELECT *
@@ -22,7 +22,7 @@ INSERT INTO "languages" ("language_name", "uid")
     RETURNING "lid";
 `;
 
-// Submission-related SQL queries
+// Submission-related queries
 
 exports.GET_AVAILABLE_SUBMISSIONS = `
 SELECT
@@ -109,7 +109,7 @@ exports.DELETE_MULTIPLE_SUBMISSIONS = `
     WHERE "sid" = ANY($1::int[]);
 `;
 
-// Model-related SQL queries
+// Model-related queries
 
 exports.GET_MODEL_BRIEF = `
 SELECT l.lid, l.language_name AS language_name, m.model_name AS model_name
@@ -135,7 +135,7 @@ exports.DELETE_MODEL = `
     WHERE mid = $1;
 `;
 
-// Profile-related SQL queries
+// Profile-related queries
 
 exports.GET_PROFILE_INFO = `
 SELECT username, initials
@@ -143,7 +143,7 @@ FROM profiles
 WHERE id = $1
 `;
 
-//Room-related SQL queries
+//Room-related queries
 
 exports.CREATE_ROOM = `
     INSERT INTO rooms ("created_by", "lid") 
