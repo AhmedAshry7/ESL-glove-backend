@@ -77,6 +77,18 @@ exports.getModels = async (req, res) => {
   }
 };
 
+
+exports.getAllModels = async (req, res) => {
+
+  try {
+    const models = await modelsService.getAllModels();
+    res.json(models);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 exports.getModelFile = async (req, res) => {
   const { mid } = req.params;
   if (!mid) return res.status(400).json({ error: 'Missing mid' });

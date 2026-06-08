@@ -10,13 +10,16 @@ exports.getModelBrief = async (modelId) => {
 
 exports.getModels = async (lid) => {
     if (!lid) {
-        const result = await pool.query(GET_MODELs);
+        const result = await pool.query(GET_MODELs, [null]);
         return result.rows;
     }
     const result = await pool.query(GET_MODELs, [lid]);
     return result.rows;
 };
-
+exports.getAllModels = async () => {
+        const result = await pool.query(GET_MODELs, [null]);
+        return result.rows;
+};
 exports.deleteModel = async (mid, model_file) => {
     const result = await pool.query(DELETE_MODEL, [mid]);
     const fileName = model_file.split('/').pop();

@@ -3,6 +3,7 @@ const router = express.Router();
 const modelController = require('../controllers/modelsController');
 
 router.get('/brief/:modelId', modelController.getModelBrief);
+router.get("/models", modelController.getAllModels);
 router.get("/models/:lid", modelController.getModels);
 router.get("/models/download/:mid",modelController.getModelFile)
 router.post("/addModel",modelController.addModel);
